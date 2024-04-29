@@ -241,13 +241,12 @@ impl<T: Ord + Default> RBTree<T> {
                     } else {
                         let gp_node = grandparent.unwrap().as_mut();
                         let new_dir = (gp_node.links[1] == parent).into();
-                        let rotated;
 
-                        if Node::is_red(s_node.link(last)) {
-                            rotated = parent_node.double_rotation(last);
+                        let rotated = if Node::is_red(s_node.link(last)) {
+                            parent_node.double_rotation(last)
                         } else {
-                            rotated = parent_node.single_rotation(last);
-                        }
+                            parent_node.single_rotation(last)
+                        };
 
                         gp_node.set_link(new_dir, Some(rotated));
 
@@ -287,7 +286,7 @@ impl<T: Ord + Default> RBTree<T> {
         result: *mut Node<T>,
     ) {
         // null check. todo: prove this is a waste of an if check
-        if result_parent.is_null() || current.is_null() || parent.is_null() || result.is_null() {
+        if result_parent.is_null() || parent.is_null() || result.is_null() {
             return;
         }
         // update the result parent pointer to point to the current node, which at this point
@@ -312,21 +311,5 @@ impl<T: Ord + Default> RBTree<T> {
         // finally, update what the current node points to
         current.links[0] = (*result).link(Left);
         current.links[1] = (*result).link(Right);
-    }
-}
-
-
-// todo: this
-unsafe impl<T:Ord> LargeAllocator for RBTree<T> {
-    unsafe fn alloc(&mut self, layout: Layout) -> *mut u8 {
-        todo!()
-    }
-
-    unsafe fn dealloc(&mut self, ptr: *mut u8) {
-        todo!()
-    }
-
-    unsafe fn realloc(&mut self, ptr: *mut u8, layout: Layout, new_size: usize) -> *mut u8 {
-        todo!()
     }
 }
