@@ -1,9 +1,9 @@
 use crate::common::{request_memory, PAGE_SIZE};
+use crate::large_allocator::LargeAllocator;
 use crate::rb_tree::Colour::{Black, Red};
 use crate::rb_tree::Direction::{Left, Right};
 use std::alloc::Layout;
 use std::ptr::NonNull;
-use crate::large_allocator::LargeAllocator;
 
 #[derive(PartialEq)]
 enum Colour {
@@ -29,9 +29,9 @@ impl Direction {
 impl From<bool> for Direction {
     fn from(value: bool) -> Self {
         if value {
-            Direction::Right
+            Right
         } else {
-            Direction::Left
+            Left
         }
     }
 }
